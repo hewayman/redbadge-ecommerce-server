@@ -12,18 +12,23 @@ database.authenticate()
   .then(() => console.log('postgres db is connnected'))
   .catch(err => console.log(err))
 
+// database
+// .query('SHOW Tables', {
+//   type: database.QueryTypes.SHOWTABLES
+// })
+// .then(result => console.log(result))
+
 // this links the reviews to the users
 User = database.import('./models/user');
 Reviews = database.import('./models/review');
-
-Reviews.belongsTo(User); // user id ends up on reviews table
-User.hasMany(Reviews);
-
-// this links the reviews to the listings
 Listing = database.import('./models/listing');
-// Reviews = database.import('./models/review');
 
-Reviews.belongsTo(Listing); // has new column // userinfo
-Listing.hasMany(Reviews); // user
+// one to many relationship for users and reviews
+User.hasMany(Reviews);
+Reviews.belongsTo(User);
+
+// one to many relationship for listings and reviews
+Listing.hasMany(Reviews); 
+Reviews.belongsTo(Listing);
 
 module.exports = database;

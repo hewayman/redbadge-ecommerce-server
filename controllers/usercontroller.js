@@ -10,7 +10,7 @@ router.post('/register', (req, res) =>{
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 12),
     firstName: req.body.firstName,
-    lastName: req.body.lastName
+    lastName: req.body.lastName,
     // ,
     // isAdmin: req.body.isAdmin,
     // firstName: req.body.firstName,
@@ -33,6 +33,25 @@ router.post('/register', (req, res) =>{
   })
   .catch(err => res.status(500).json({ error: err }));
 })
+
+router.post('/admin', (req, res) =>{
+  User.create({ 
+    email: process.env.ADMIN_EMAIL, 
+    password: bcrypt.hashSync(process.env.ADMIN_PASS, 12), 
+    isAdmin: true 
+  })
+  .then(user => {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d'});
+
+    res.status(200).json({
+      user: user,
+      message: 'Admin created successfully',
+      sessionToken: token
+    });
+  })
+  .catch(err => res.status(500).json({ error: 'Admin account not created' }))
+})
+
 
 router.get('/all', (req, res) => {
   User.findAll()

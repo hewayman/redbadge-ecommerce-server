@@ -29,8 +29,6 @@ router.post('/create', validateSession, (req, res) => {
     description: req.body.description,
     price: req.body.price,
     itemNum: req.body.itemNum,
-    // ,
-    // owner: req.user.id
   }
 
   Listing.create(listingFromRequest)
