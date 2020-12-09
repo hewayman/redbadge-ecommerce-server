@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     date: {
       type: DataTypes.STRING,
       allowNull: false
-    },
+    }
+    
+    // ,
     // userFirstName: {
     //   type: DataTypes.STRING,
     //   allowNull: false
@@ -19,14 +21,14 @@ module.exports = (sequelize, DataTypes) => {
     //   type: DataTypes.STRING,
     //   allowNull: false
     // },
-    itemID: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    owner: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    }
+    // itemID: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false
+    // }
+    // owner: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false
+    // }
   })
 };
  

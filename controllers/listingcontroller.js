@@ -28,7 +28,7 @@ router.post('/create', validateSession, (req, res) => {
     color: req.body.color,
     description: req.body.description,
     price: req.body.price,
-    itemNum: req.body.itemNum
+    itemNum: req.body.itemNum,
     // ,
     // owner: req.user.id
   }
