@@ -36,5 +36,5 @@ module.exports = (sequelize, DataTypes) => {
     phone: {
       type: DataTypes.INTEGER
     }
-  })
+  });
 };

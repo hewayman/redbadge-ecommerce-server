@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('storeItem', {
+  return sequelize.define('review', {
     itemID: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -24,5 +24,5 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   })
-}
+};
  
