@@ -19,4 +19,7 @@ app.use('/user', usercontroller);
 const listingcontroller = require('./controllers/listingcontroller');
 app.use('/listing', listingcontroller);
 
+const reviewcontroller = require('./controllers/reviewcontroller');
+app.use('/review', reviewcontroller);
+
 app.listen(process.env.PORT, function() { console.log(`app is listening on port ${process.env.PORT}`)});

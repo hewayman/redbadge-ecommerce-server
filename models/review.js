@@ -1,10 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('review', {
-    itemID: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    Rating: {
+    rating: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -15,12 +11,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    userFirstName: {
-      type: DataTypes.STRING,
+    // userFirstName: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false
+    // },
+    // userLastName: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false
+    // },
+    itemID: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    userLastName: {
-      type: DataTypes.STRING,
+    owner: {
+      type: DataTypes.INTEGER,
       allowNull: false
     }
   })
