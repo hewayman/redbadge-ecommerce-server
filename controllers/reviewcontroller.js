@@ -5,7 +5,7 @@ const validateSession = require('../middleware/validate-session');
 // get all reviews
 router.get('/', (req, res) => {
   Review.findAll()
-  .then(item => res.status(200).json(item))
+  .then(item => res.status(200).json({item}))
   .catch(err => res.status(500).json({error: "Cannot find reviews."}))
 })
 
@@ -15,13 +15,8 @@ router.post('/create', validateSession, (req, res) => {
     rating: req.body.rating,
     review: req.body.review,
     date: req.body.date,
-    userId: req.user.id
-    // ,
-    // userFirstName: req.user.firstName,
-    // userLastName: req.user.lastName,
-    // itemID: req.listing.id,
-    // owner: req.user.id
-    // itemID: req.listing.id
+    userId: req.user.id,
+    storeitemId: req.body.storeitemId
   }
 
   Review.create(reviewsFromRequest)

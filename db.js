@@ -2,33 +2,29 @@
 const Sequelize = require('sequelize');
 
 // create a new instance of Sequelize, connecting us to a database
-const database = new Sequelize(process.env.NAME, 'postgres', process.env.PASS, {
-  host: 'localhost',
-  dialect: 'postgres'
+const database = new Sequelize(
+  process.env.DATABASE_URL || `postgresql://postgres:${encodeURIComponent(process.env.PASS)}@localhost/ecommerce-store`, {
+  dialect: 'postgres',
 });
 
 // authenticate and log into the database
 database.authenticate()
-  .then(() => console.log('postgres db is connnected'))
+  .then(() => database.sync())  
+  // .then(() => database.sync({force: true}))  
+  .then(() => console.log('postgres db is connected on ' + process.env.PORT))
   .catch(err => console.log(err))
 
-// database
-// .query('SHOW Tables', {
-//   type: database.QueryTypes.SHOWTABLES
-// })
-// .then(result => console.log(result))
-
-// this links the reviews to the users
+// this links the reviews to the users & reviews to the store items
 User = database.import('./models/user');
-Reviews = database.import('./models/review');
+Review = database.import('./models/review');
 Listing = database.import('./models/listing');
 
 // one to many relationship for users and reviews
-User.hasMany(Reviews);
-Reviews.belongsTo(User);
+User.hasMany(Review, { as: 'userReview'});
+Review.belongsTo(User);
 
 // one to many relationship for listings and reviews
-Listing.hasMany(Reviews); 
-Reviews.belongsTo(Listing);
+Listing.hasMany(Review, { as: 'itemReview' }); 
+Review.belongsTo(Listing);
 
 module.exports = database;

@@ -1,12 +1,14 @@
 const router = require('express').Router();
 const Listing = require('../db').import('../models/listing');
+const Review = require('../db').import('../models/review');
 const validateSession = require('../middleware/validate-session');
 const {Op} = require('sequelize');
 
 // get all item listings
 router.get('/', (req, res) => {
-  Listing.findAll()
-    .then(listing => res.status(200).json(listing))
+  Listing.findAll({ include: [{ model: Review, as: 'itemReview'}] })
+  // Listing.findAll()
+    .then(listing => res.status(200).json({ listing}))
     .catch(err => res.status(500).json({ error: 'Cannot retrieve listings' }))
 });
 
@@ -17,7 +19,7 @@ router.get('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  .then(listing => res.status(200).json(listing))
+  .then(listing => res.status(200).json({listing}))
   .catch(err => res.status(500).json({ error: "Item not found" }))
 })
 
@@ -29,6 +31,7 @@ router.post('/create', validateSession, (req, res) => {
     description: req.body.description,
     price: req.body.price,
     itemNum: req.body.itemNum,
+    imgURL: req.body.imgURL,
   }
 
   Listing.create(listingFromRequest)
@@ -45,7 +48,7 @@ router.get('/name/:itemName', (req, res) => {
       }
     }
   })
-  .then(item => res.status(200).json(item))
+  .then(item => res.status(200).json({item}))
   .catch(err => res.status(500).json({error: "Item not found"}))
 });
 
@@ -58,7 +61,7 @@ router.get('/color/:color', (req, res) => {
       }
     }
   })
-  .then(item => res.status(200).json(item))
+  .then(item => res.status(200).json({item}))
   .catch(err => res.status(500).json({error: "Item not found"}))
 });
 
@@ -69,7 +72,7 @@ router.get('/item/:itemNum', (req, res) => {
       itemNum: req.params.itemNum
     }
   })
-  .then(item => res.status(200).json(item))
+  .then(item => res.status(200).json({item}))
   .catch(err => res.status(500).json({error: "Item not found"}))
 });
 
@@ -78,7 +81,7 @@ router.put('/:id', validateSession, (req, res) => {
   Listing.update(req.body, {
     where: { id: req.params.id }
   })
-  .then(listing => res.status(200).json(listing))
+  .then(listing => res.status(200).json({listing}))
   .catch(err => res.status(500).json({ error: "Update not successful" }))
 });
 

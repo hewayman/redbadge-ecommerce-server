@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../db').import('../models/user');
+const Review = require('../db').import('../models/review');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validateSession = require('../middleware/validate-session');
@@ -11,16 +12,7 @@ router.post('/register', (req, res) =>{
     password: bcrypt.hashSync(req.body.password, 12),
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    // ,
-    // isAdmin: req.body.isAdmin,
-    // firstName: req.body.firstName,
-    // lastName: req.body.lastName,
-    // addressLn1: req.body.addressLn1,
-    // addressLn2: req.body.addressLn2,
-    // city: req.body.city,
-    // state: req.body.state,
-    // zipcode: req.body.zipcode,
-    // phone: req.body.phone
+    isAdmin: req.body.isAdmin,
   })
   .then(user => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d'});
@@ -52,10 +44,15 @@ router.post('/admin', (req, res) =>{
   .catch(err => res.status(500).json({ error: 'Admin account not created' }))
 })
 
-
 router.get('/all', (req, res) => {
-  User.findAll()
-    .then(user => res.status(200).json(user))
+  User.findAll({ include: [{ model: Review, as: 'userReview'}] })
+    .then(user => res.status(200).json({user}))
+    .catch(err => res.status(500).json({error: 'Cannot display users'}))
+})
+
+router.get('/:id', (req, res) => {
+  User.findOne({ include: [{ model: Review, as: 'userReview'}], where: { id: req.params.id } })
+    .then(user => res.status(200).json({user}))
     .catch(err => res.status(500).json({error: 'Cannot display users'}))
 })
 
@@ -66,7 +63,7 @@ router.put('/details', validateSession, (req, res) => {
       email: req.body.email 
     }
   })
-  .then(user => res.status(200).json(user))
+  .then(user => res.status(200).json({user}))
   .catch(err => res.status(500).json({ error: 'Update not successful' }))
 })
 
