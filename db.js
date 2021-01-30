@@ -5,6 +5,9 @@ const Sequelize = require('sequelize');
 const database = new Sequelize(
   process.env.DATABASE_URL || `postgresql://postgres:${encodeURIComponent(process.env.PASS)}@localhost/ecommerce-store`, {
   dialect: 'postgres',
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 // authenticate and log into the database
